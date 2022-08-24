@@ -1,29 +1,30 @@
-﻿using GraphQL.Data;
+using GraphQL.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraphQL.DataLoader;
 
 public class SpeakerByIdDataLoader : BatchDataLoader<int, Speaker>
 {
-    private readonly IDbContextFactory<ApplicationDbContext> dbContextFactory;
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
     public SpeakerByIdDataLoader(
-        IBatchScheduler batchScheduler, 
-        IDbContextFactory<ApplicationDbContext> dbContextFactory) 
+        IBatchScheduler batchScheduler,
+        IDbContextFactory<ApplicationDbContext> dbContextFactory)
         : base(batchScheduler)
     {
-        this.dbContextFactory = dbContextFactory ??
+        _dbContextFactory = dbContextFactory ??
             throw new ArgumentNullException(nameof(dbContextFactory));
     }
 
     protected override async Task<IReadOnlyDictionary<int, Speaker>> LoadBatchAsync(
-        IReadOnlyList<int> keys, 
+        IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
-        using ApplicationDbContext dbContext = dbContextFactory.CreateDbContext();
+        await using ApplicationDbContext dbContext =
+            _dbContextFactory.CreateDbContext();
 
         return await dbContext.Speakers
             .Where(s => keys.Contains(s.Id))
-            .ToDictionaryAsync(s => s.Id, cancellationToken);
+            .ToDictionaryAsync(t => t.Id, cancellationToken);
     }
 }

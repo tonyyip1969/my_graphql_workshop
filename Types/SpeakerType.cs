@@ -1,7 +1,13 @@
-﻿using GraphQL.Data;
-using GraphQL.DataLoader;
-using GraphQL.Extensions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using GraphQL.Data;
+using GraphQL.DataLoader;
+using HotChocolate;
+using HotChocolate.Types;
+using GraphQL.Extensions;
 
 namespace GraphQL.Types;
 
@@ -10,7 +16,7 @@ public class SpeakerType : ObjectType<Speaker>
     protected override void Configure(IObjectTypeDescriptor<Speaker> descriptor)
     {
         descriptor
-            .Field(t => t.SessionSpeakers)
+            .Field(Speaker => Speaker.SessionSpeakers)
             .ResolveWith<SpeakerResolvers>(t => t.GetSessionsAsync(default!, default!, default!, default))
             .UseDbContext<ApplicationDbContext>()
             .Name("sessions");
@@ -19,7 +25,7 @@ public class SpeakerType : ObjectType<Speaker>
     private class SpeakerResolvers
     {
         public async Task<IEnumerable<Session>> GetSessionsAsync(
-            Speaker speaker,
+            [Parent] Speaker speaker,
             [ScopedService] ApplicationDbContext dbContext,
             SessionByIdDataLoader sessionById,
             CancellationToken cancellationToken)

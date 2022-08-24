@@ -1,16 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Types;
 
-namespace GraphQL.Extensions;
-
-public static class ObjectFieldDescriptorExtensions
+namespace GraphQL.Extensions
 {
-    public static IObjectFieldDescriptor UseDbContext<TDbContext>(
-        this IObjectFieldDescriptor descriptor) where TDbContext : DbContext
+    public static class ObjectFieldDescriptorExtensions
     {
-        return descriptor.UseScopedService<TDbContext>(
-            create: s => s.GetRequiredService<IDbContextFactory<TDbContext>>().CreateDbContext(),
-            disposeAsync: (s, c) => c.DisposeAsync());
+        public static IObjectFieldDescriptor UseDbContext<TDbContext>(
+            this IObjectFieldDescriptor descriptor)
+            where TDbContext : DbContext
+        {
+            return descriptor.UseScopedService(
+                create: s => s.GetRequiredService<IDbContextFactory<TDbContext>>().CreateDbContext(),
+                disposeAsync: (s, c) => c.DisposeAsync());
+        }
     }
 }

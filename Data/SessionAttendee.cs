@@ -1,4 +1,4 @@
-﻿namespace GraphQL.Data;
+namespace GraphQL.Data;
 
 public class SessionAttendee
 {
