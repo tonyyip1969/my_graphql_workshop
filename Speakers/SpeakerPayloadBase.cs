@@ -7,7 +7,7 @@ public class SpeakerPayloadBase : Payload
 {
 	public SpeakerPayloadBase(Speaker speaker)
 	{
-		Speakers = speaker;
+		Speaker = speaker;
 	}
 
 	protected SpeakerPayloadBase(IReadOnlyList<UserError> errors)
@@ -16,5 +16,5 @@ public class SpeakerPayloadBase : Payload
 
 	}
 
-	public Speaker? Speakers { get; }
+	public Speaker? Speaker { get; }
 }

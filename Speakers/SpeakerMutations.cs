@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using GraphQL.Data;
 using GraphQL.Extensions;
 using HotChocolate;
+using HotChocolate.Types;
 
 namespace GraphQL.Speakers;
 
