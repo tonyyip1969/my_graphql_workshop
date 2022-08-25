@@ -19,6 +19,10 @@ public class TrackType : ObjectType<Track>
                 ctx.DataLoader<TrackByIdDataLoader>().LoadAsync(id, ctx.RequestAborted));
 
         descriptor
+            .Field(t => t.Name)
+            .UseUpperCase();
+
+        descriptor
             .Field(t => t.Sessions)
             .ResolveWith<TrackResolvers>(t => t.GetSessionsAsync(default!, default!, default!, default))
             .UseDbContext<ApplicationDbContext>()
