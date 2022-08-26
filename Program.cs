@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using GraphQL.Speakers;
 using GraphQL.Sessions;
 using GraphQL.Tracks;
+using GraphQL.Conferences;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,14 +17,17 @@ builder.Services.AddGraphQLServer()
         .AddTypeExtension<SpeakerQueries>()
         .AddTypeExtension<SessionQueries>()
         .AddTypeExtension<TrackQueries>()
+        .AddTypeExtension<ConferenceQueries>()
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<SpeakerMutations>()
         .AddTypeExtension<SessionMutations>()
         .AddTypeExtension<TrackMutations>()
+        .AddTypeExtension<ConferenceMutations>()
     .AddType<SpeakerType>()
     .AddType<AttendeeType>()
     .AddType<SessionType>()
     .AddType<TrackType>()
+    .AddType<ConferenceType>()
     .EnableRelaySupport()
     .AddDataLoader<SpeakerByIdDataLoader>()
     .AddDataLoader<SessionByIdDataLoader>();

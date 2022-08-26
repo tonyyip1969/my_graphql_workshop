@@ -34,4 +34,6 @@
        public DbSet<Speaker> Speakers { get; set; } = default!;
 
        public DbSet<Attendee> Attendees { get; set; } = default!;
-   }
+
+        public DbSet<Conference> Conferences { get; set; } = default!;
+    }

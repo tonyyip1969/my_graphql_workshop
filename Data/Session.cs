@@ -33,4 +33,8 @@ public class Session
         new List<SessionAttendee>();
 
     public Track? Track { get; set; }
+
+    public int? ConferenceId { get; set; }
+
+    public Conference? Conference { get; set; }
 }

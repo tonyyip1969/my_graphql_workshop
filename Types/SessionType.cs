@@ -34,8 +34,16 @@ public class SessionType : ObjectType<Session>
             .ResolveWith<SessionResolvers>(t => t.GetTrackAsync(default!, default!, default));
 
         descriptor
+            .Field(t => t.Conference)
+            .ResolveWith<SessionResolvers>(t => t.GetConferenceAsync(default!, default!, default));
+
+        descriptor
             .Field(t => t.TrackId)
             .ID(nameof(Track));
+
+        descriptor
+            .Field(t => t.ConferenceId)
+            .ID(nameof(Conference));
     }
 
     private class SessionResolvers
@@ -82,5 +90,19 @@ public class SessionType : ObjectType<Session>
 
             return await trackById.LoadAsync(session.TrackId.Value, cancellationToken);
         }
+
+        public async Task<Conference?> GetConferenceAsync(
+            Session session,
+            ConferenceByIdDataLoader conferenceById,
+            CancellationToken cancellationToken)
+        {
+            if (session.ConferenceId is null)
+            {
+                return null;
+            }
+
+            return await conferenceById.LoadAsync(session.ConferenceId.Value, cancellationToken);
+        }
+
     }
 }

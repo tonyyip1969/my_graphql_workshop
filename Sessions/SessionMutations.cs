@@ -31,6 +31,7 @@ public class SessionMutations
         {
             Title = input.Title,
             Abstract = input.Abstract,
+            ConferenceId = input.ConferenceId,
         };
 
         foreach (int speakerId in input.SpeakerIds)
