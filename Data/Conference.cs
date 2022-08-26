@@ -12,4 +12,7 @@ public class Conference
 
     public ICollection<Session> Sessions { get; set; } =
         new List<Session>();
+
+    public ICollection<Track> Tracks { get; set; } = new List<Track>();
+
 }

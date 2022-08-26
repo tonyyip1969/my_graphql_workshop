@@ -14,7 +14,12 @@ public class TrackMutations
         [ScopedService] ApplicationDbContext context,
         CancellationToken cancellationToken)
     {
-        var track = new Track { Name = input.Name };
+        var track = new Track 
+        { 
+            Name = input.Name,
+            ConferenceId = input.ConferenceId            
+        };
+
         context.Tracks.Add(track);
 
         await context.SaveChangesAsync(cancellationToken);

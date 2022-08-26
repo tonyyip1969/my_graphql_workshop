@@ -27,6 +27,10 @@ public class TrackType : ObjectType<Track>
             .ResolveWith<TrackResolvers>(t => t.GetSessionsAsync(default!, default!, default!, default))
             .UseDbContext<ApplicationDbContext>()
             .Name("sessions");
+
+        descriptor
+            .Field(t => t.Conference)
+            .ResolveWith<TrackResolvers>(t => t.GetConferenceAsync(default!, default!, default));
     }
 
     private class TrackResolvers
@@ -43,6 +47,19 @@ public class TrackType : ObjectType<Track>
                 .ToArrayAsync();
 
             return await sessionById.LoadAsync(sessionIds, cancellationToken);
+        }
+
+        public async Task<Conference?> GetConferenceAsync(
+            Track track,
+            ConferenceByIdDataLoader conferenceById,
+            CancellationToken cancellationToken)
+        {
+            if (track.ConferenceId is null)
+            {
+                return null;
+            }
+
+            return await conferenceById.LoadAsync(track.ConferenceId.Value, cancellationToken);
         }
     }
 }

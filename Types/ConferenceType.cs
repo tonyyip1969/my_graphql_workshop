@@ -5,6 +5,7 @@ using HotChocolate;
 using HotChocolate.Resolvers;
 using GraphQL.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace GraphQL.Types;
 
@@ -23,6 +24,13 @@ public class ConferenceType : ObjectType<Conference>
             .ResolveWith<ConferenceResolvers>(t => t.GetSessionsAsync(default!, default!, default!, default))
             .UseDbContext<ApplicationDbContext>()
             .Name("sessions");
+
+        descriptor
+            .Field(t => t.Tracks)
+            .ResolveWith<ConferenceResolvers>(t => t.GetTracksAsync(default!, default!, default!, default))
+            .UseDbContext<ApplicationDbContext>()
+            .Name("tracks");
+
     }
 
     private class ConferenceResolvers
@@ -39,6 +47,20 @@ public class ConferenceType : ObjectType<Conference>
                 .ToArrayAsync();
 
             return await sessionById.LoadAsync(sessionIds, cancellationToken);
+        }
+
+        public async Task<IEnumerable<Track>> GetTracksAsync(
+            Conference conference,
+            [ScopedService] ApplicationDbContext dbContext,
+            TrackByIdDataLoader trackById,
+            CancellationToken cancellationToken)
+        {
+            int[] trackIds = await dbContext.Tracks
+                .Where(s => s.Id == conference.Id)
+                .Select(s => s.Id)
+            .ToArrayAsync();
+
+            return await trackById.LoadAsync(trackIds, cancellationToken);
         }
     }
 }

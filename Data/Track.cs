@@ -11,6 +11,9 @@ public class Track
     [StringLength(200)]
     public string? Name { get; set; }
 
+    public int? ConferenceId { get; set; }
+    public Conference? Conference { get; set; }
+
     public ICollection<Session> Sessions { get; set; } =
         new List<Session>();
 }
