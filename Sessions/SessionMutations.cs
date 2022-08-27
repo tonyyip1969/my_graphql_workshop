@@ -99,10 +99,9 @@ public class SessionMutations
 
         if (session is null)
         {
-            return new TagSessionPayload(new[]
-            {
+            return new TagSessionPayload(
                 new UserError("Session not found.", "SESSION_NOT_FOUND")
-            });
+            );
         }
 
         session.SessionTags.Add(new SessionTag { TagId = input.TagId });
@@ -111,4 +110,22 @@ public class SessionMutations
         return new TagSessionPayload(session);
     }
 
+    [UseApplicationDbContext]
+    public async Task<TagSessionPayload> DeleteSessionAsync(
+        DeleteSessionInput input,
+        [ScopedService] ApplicationDbContext context)
+    {
+        Session session = await context.Sessions.FindAsync(input.sessionId);
+
+        if (session == null)
+        {
+            return new TagSessionPayload(
+                new UserError("Session not found.", "SESSION_NOT_FOUND"));
+        }
+
+        context.Sessions.Remove(session);
+        await context.SaveChangesAsync();
+
+        return new TagSessionPayload(session);
+    }
 }
