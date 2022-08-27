@@ -21,7 +21,6 @@ public class ConferenceMutations
 
         context.Conferences.Add(conference);
         await context.SaveChangesAsync();
-
         return new AddConferencePayload(conference);
     }
 }

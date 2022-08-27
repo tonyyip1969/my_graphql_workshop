@@ -24,4 +24,8 @@ public class Attendee
 
     public ICollection<SessionAttendee> SessionsAttendees { get; set; } =
         new List<SessionAttendee>();
+
+    public ICollection<ConferenceAttendee> ConferenceAttendees { get; set; } =
+        new List<ConferenceAttendee>();
+
 }

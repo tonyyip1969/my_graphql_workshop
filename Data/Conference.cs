@@ -15,4 +15,6 @@ public class Conference
 
     public ICollection<Track> Tracks { get; set; } = new List<Track>();
 
+    public ICollection<ConferenceAttendee> ConferenceAttendees { get; set; } =
+        new List<ConferenceAttendee>();
 }

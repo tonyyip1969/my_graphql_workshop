@@ -20,7 +20,7 @@ public class ConferenceQueries
         ConferenceByIdDataLoader dataLoader,
         CancellationToken cancellationToken) => dataLoader.LoadAsync(id, cancellationToken);
 
-    public async Task<IEnumerable<Conference>> GetSpeakersByIdAsync(
+    public async Task<IEnumerable<Conference>> GetConferencesByIdAsync(
         [ID(nameof(Conference))] int[] ids,
         ConferenceByIdDataLoader dataLoader,
         CancellationToken cancellationToken) => await dataLoader.LoadAsync(ids, cancellationToken);
