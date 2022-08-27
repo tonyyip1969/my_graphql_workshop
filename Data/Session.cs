@@ -32,8 +32,8 @@ public class Session
     public ICollection<SessionAttendee> SessionAttendees { get; set; } =
         new List<SessionAttendee>();
 
-    //public ICollection<SessionTag> SessionTags { get; set; } =
-    //    new List<SessionTag>();
+    public ICollection<SessionTag> SessionTags { get; set; } =
+        new List<SessionTag>();
 
     public Track? Track { get; set; }
 

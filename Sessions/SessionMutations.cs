@@ -87,25 +87,25 @@ public class SessionMutations
         return new ScheduleSessionPayload(session);
     }
 
-    //[UseApplicationDbContext]
-    //public async Task<TagSessionPayload> TaggingSessionAsync(
-    //    TagSessionInput input,
-    //    [ScopedService] ApplicationDbContext context) 
-    //{
-    //    Session session = await context.Sessions.FindAsync(input.SessionId);
+    [UseApplicationDbContext]
+    public async Task<TagSessionPayload> TaggingSessionAsync(
+        TagSessionInput input,
+        [ScopedService] ApplicationDbContext context)
+    {
+        Session session = await context.Sessions.FindAsync(input.SessionId);
 
-    //    if (session is null)
-    //    {
-    //        return new TagSessionPayload(new[] 
-    //        {
-    //            new UserError("Session not found.", "SESSION_NOT_FOUND") 
-    //        });
-    //    }
+        if (session is null)
+        {
+            return new TagSessionPayload(new[]
+            {
+                new UserError("Session not found.", "SESSION_NOT_FOUND")
+            });
+        }
 
-    //    session.SessionTags.Add(new SessionTag { TagId = input.TagId });
-    //    await context.SaveChangesAsync();
+        session.SessionTags.Add(new SessionTag { TagId = input.TagId });
+        await context.SaveChangesAsync();
 
-    //    return new TagSessionPayload(session);
-    //}
+        return new TagSessionPayload(session);
+    }
 
 }
