@@ -29,6 +29,12 @@ public class SessionType : ObjectType<Session>
             .UseDbContext<ApplicationDbContext>()
             .Name("attendees");
 
+        //descriptor
+        //    .Field(t => t.SessionTags)
+        //    .ResolveWith<SessionResolvers>(t => t.GetTagsAsync(default!, default!, default!, default))
+        //    .UseDbContext<ApplicationDbContext>()
+        //    .Name("tags");
+
         descriptor
             .Field(t => t.Track)
             .ResolveWith<SessionResolvers>(t => t.GetTrackAsync(default!, default!, default));
@@ -78,6 +84,21 @@ public class SessionType : ObjectType<Session>
             return await attendeeById.LoadAsync(attendeeIds, cancellationToken);
         }
 
+        //public async Task<IEnumerable<Tag>> GetTagsAsync(
+        //    Session session,
+        //    [ScopedService] ApplicationDbContext dbContext,
+        //    TagByIdDataLoader tagById,
+        //    CancellationToken cancellationToken)
+        //{
+        //    int[] tagIds = await dbContext.Sessions
+        //        .Where(s => s.Id == session.Id)
+        //        .Include(session => session.SessionTags)
+        //        .SelectMany(session => session.SessionTags.Select(t => t.TagId))
+        //        .ToArrayAsync();
+
+        //    return await tagById.LoadAsync(tagIds, cancellationToken);
+        //}
+
         public async Task<Track?> GetTrackAsync(
             Session session,
             TrackByIdDataLoader trackById,
@@ -96,13 +117,7 @@ public class SessionType : ObjectType<Session>
             ConferenceByIdDataLoader conferenceById,
             CancellationToken cancellationToken)
         {
-            if (session.ConferenceId is null)
-            {
-                return null;
-            }
-
-            return await conferenceById.LoadAsync(session.ConferenceId.Value, cancellationToken);
+            return await conferenceById.LoadAsync(session.ConferenceId, cancellationToken);
         }
-
     }
 }

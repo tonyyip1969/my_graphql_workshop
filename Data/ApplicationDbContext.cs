@@ -21,6 +21,11 @@ public class ApplicationDbContext : DbContext
             .Entity<SessionAttendee>()
             .HasKey(ca => new { ca.SessionId, ca.AttendeeId });
 
+        // Many-to-many: Session <-> Attendee
+        modelBuilder
+            .Entity<SessionTag>()
+            .HasKey(ca => new { ca.SessionId, ca.TagId });
+
         // Many-to-many: Speaker <-> Session
         modelBuilder
             .Entity<SessionSpeaker>()
@@ -41,4 +46,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Attendee> Attendees { get; set; } = default!;
 
     public DbSet<Conference> Conferences { get; set; } = default!;
+
+    public DbSet<Tag> Tags { get; set; } = default!;
 }

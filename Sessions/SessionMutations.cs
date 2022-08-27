@@ -27,6 +27,12 @@ public class SessionMutations
                 new UserError("No speaker assigned.", "NO_SPEAKER"));
         }
 
+        if (context.Conferences.Any(x => x.Id == input.ConferenceId) == false)
+        {
+            return new AddSessionPayload(
+                new UserError("Conference not found", "CONFERENCE_NOT_FOUND"));
+        }
+
         var session = new Session
         {
             Title = input.Title,
@@ -41,6 +47,11 @@ public class SessionMutations
                 SpeakerId = speakerId
             });
         }
+
+        //foreach (var tagId in input.TagIds)
+        //{
+        //    session.SessionTags.Add(new SessionTag { TagId = tagId });
+        //}
 
         context.Sessions.Add(session);
         await context.SaveChangesAsync(cancellationToken);
@@ -75,4 +86,26 @@ public class SessionMutations
 
         return new ScheduleSessionPayload(session);
     }
+
+    //[UseApplicationDbContext]
+    //public async Task<TagSessionPayload> TaggingSessionAsync(
+    //    TagSessionInput input,
+    //    [ScopedService] ApplicationDbContext context) 
+    //{
+    //    Session session = await context.Sessions.FindAsync(input.SessionId);
+
+    //    if (session is null)
+    //    {
+    //        return new TagSessionPayload(new[] 
+    //        {
+    //            new UserError("Session not found.", "SESSION_NOT_FOUND") 
+    //        });
+    //    }
+
+    //    session.SessionTags.Add(new SessionTag { TagId = input.TagId });
+    //    await context.SaveChangesAsync();
+
+    //    return new TagSessionPayload(session);
+    //}
+
 }

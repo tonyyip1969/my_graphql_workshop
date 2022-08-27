@@ -7,6 +7,7 @@ using GraphQL.Sessions;
 using GraphQL.Tracks;
 using GraphQL.Conferences;
 using GraphQL.Attendees;
+using GraphQL.Tags;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,12 +21,14 @@ builder.Services.AddGraphQLServer()
         .AddTypeExtension<TrackQueries>()
         .AddTypeExtension<ConferenceQueries>()
         .AddTypeExtension<AttendeeQueries>()
+        .AddTypeExtension<TagQueries>()
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<SpeakerMutations>()
         .AddTypeExtension<SessionMutations>()
         .AddTypeExtension<TrackMutations>()
         .AddTypeExtension<ConferenceMutations>()
         .AddTypeExtension<AttendeeMutations>()
+        .AddTypeExtension<TagMutations>()
     .AddType<SpeakerType>()
     .AddType<AttendeeType>()
     .AddType<SessionType>()
