@@ -48,10 +48,13 @@ public class SessionMutations
             });
         }
 
-        //foreach (var tagId in input.TagIds)
-        //{
-        //    session.SessionTags.Add(new SessionTag { TagId = tagId });
-        //}
+        if (input.TagIds != null && input.TagIds.Any())
+        {
+            foreach (var tagId in input.TagIds)
+            {
+                session.SessionTags.Add(new SessionTag { TagId = tagId });
+            }
+        }
 
         context.Sessions.Add(session);
         await context.SaveChangesAsync(cancellationToken);

@@ -7,5 +7,6 @@ public record AddSessionInput(
     string Title,
     string? Abstract,
     int ConferenceId,
-    [ID(nameof(Speaker))] IReadOnlyList<int> SpeakerIds);
+    [ID(nameof(Speaker))] IReadOnlyList<int> SpeakerIds,
+    [ID(nameof(Tag))] IReadOnlyList<int>? TagIds);
 
