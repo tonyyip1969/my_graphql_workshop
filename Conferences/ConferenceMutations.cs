@@ -3,6 +3,7 @@ using GraphQL.Extensions;
 using GraphQL.Speakers;
 using HotChocolate;
 using HotChocolate.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraphQL.Conferences;
 
@@ -10,7 +11,7 @@ namespace GraphQL.Conferences;
 public class ConferenceMutations
 {
     [UseApplicationDbContext]
-    public async Task<AddConferencePayload> AddConferenceAsync(
+    public async Task<ConferencePayload> AddConferenceAsync(
         AddConferenceInput input,
         [ScopedService] ApplicationDbContext context)
     {
@@ -21,6 +22,37 @@ public class ConferenceMutations
 
         context.Conferences.Add(conference);
         await context.SaveChangesAsync();
-        return new AddConferencePayload(conference);
+        return new ConferencePayload(conference);
     }
+
+    [UseApplicationDbContext]
+    public async Task<ConferencePayload> UpdateConferenceAsync(
+        int id,
+        string newName,
+        [ScopedService] ApplicationDbContext context)
+    {
+        var conference = context.Conferences.FirstOrDefault(x => x.Id == id);
+        if (conference == null)
+            throw new GraphQLException("Conference not found!");
+
+        conference.Name = newName;
+        await context.SaveChangesAsync();
+        return new ConferencePayload(conference);
+    }
+
+    [UseApplicationDbContext]
+    public async Task<bool> DeleteConferenceAsync(
+        int id,
+        [ScopedService] ApplicationDbContext context)
+    {
+        var conference = await context.Conferences.FirstOrDefaultAsync(x => x.Id == id);
+        if (conference == null)
+            throw new GraphQLException("Conference not found!");
+
+        context.Remove(conference);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+
 }
