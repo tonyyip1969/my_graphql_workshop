@@ -16,6 +16,8 @@ public class AttendeeMutations
         AddAttendeeInput input,
         [ScopedService] ApplicationDbContext context)
     {
+        List<int> conferenceIds = new();
+
         if (input.SessionIds.Count == 0)
         {
             return new AddAttendeePayload(
@@ -35,10 +37,28 @@ public class AttendeeMutations
 
         foreach (var sessionId in input.SessionIds)
         {
+            var session = await context.Sessions.FindAsync(sessionId);
+            if (session == null)
+                throw new GraphQLException("Session not found!");
+
+            if (conferenceIds.Any(x => x == session.ConferenceId) == false)
+            {
+                conferenceIds.Add(session.ConferenceId);
+            }
+
             attendee.SessionsAttendees.Add(
                 new SessionAttendee
                 {
                     SessionId = sessionId
+                });
+        }
+
+        foreach (var conferenceId in conferenceIds)
+        {
+            attendee.ConferenceAttendees.Add(
+                new ConferenceAttendee
+                {
+                    ConferenceId = conferenceId
                 });
         }
 
