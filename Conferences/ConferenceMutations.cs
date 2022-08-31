@@ -33,7 +33,7 @@ public class ConferenceMutations
     {
         var conference = context.Conferences.FirstOrDefault(x => x.Id == id);
         if (conference == null)
-            throw new GraphQLException("Conference not found!");
+            throw new GraphQLException(new Error("Conference id not found!", "CONFERENCE_NOT_FOOUND"));
 
         conference.Name = newName;
         await context.SaveChangesAsync();
@@ -47,7 +47,7 @@ public class ConferenceMutations
     {
         var conference = await context.Conferences.FirstOrDefaultAsync(x => x.Id == id);
         if (conference == null)
-            throw new GraphQLException("Conference not found!");
+            throw new GraphQLException(new Error("Conference id not found!", "CONFERENCE_NOT_FOOUND"));
 
         context.Remove(conference);
         await context.SaveChangesAsync();
