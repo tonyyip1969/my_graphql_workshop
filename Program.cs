@@ -36,6 +36,8 @@ builder.Services.AddGraphQLServer()
     .AddType<ConferenceType>()
     .AddType<TagType>()
     .EnableRelaySupport()
+    .AddFiltering()
+    .AddSorting()
     .AddDataLoader<SpeakerByIdDataLoader>()
     .AddDataLoader<SessionByIdDataLoader>();
 

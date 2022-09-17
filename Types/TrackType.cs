@@ -26,6 +26,7 @@ public class TrackType : ObjectType<Track>
             .Field(t => t.Sessions)
             .ResolveWith<TrackResolvers>(t => t.GetSessionsAsync(default!, default!, default!, default))
             .UseDbContext<ApplicationDbContext>()
+            .UsePaging<NonNullType<SessionType>>()
             .Name("sessions");
 
         descriptor
@@ -42,7 +43,7 @@ public class TrackType : ObjectType<Track>
             CancellationToken cancellationToken)
         {
             int[] sessionIds = await dbContext.Sessions
-                .Where(s => s.Id == track.Id)
+                .Where(s => s.TrackId == track.Id)
                 .Select(s => s.Id)
                 .ToArrayAsync();
 
