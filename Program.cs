@@ -29,6 +29,9 @@ builder.Services.AddGraphQLServer()
         .AddTypeExtension<ConferenceMutations>()
         .AddTypeExtension<AttendeeMutations>()
         .AddTypeExtension<TagMutations>()
+    .AddSubscriptionType(d => d.Name("Subscription"))
+        .AddTypeExtension<SessionSubscriptions>()
+        .AddTypeExtension<AttendeeSubscriptions>()
     .AddType<SpeakerType>()
     .AddType<AttendeeType>()
     .AddType<SessionType>()
@@ -38,6 +41,7 @@ builder.Services.AddGraphQLServer()
     .EnableRelaySupport()
     .AddFiltering()
     .AddSorting()
+    .AddInMemorySubscriptions()
     .AddDataLoader<SpeakerByIdDataLoader>()
     .AddDataLoader<SessionByIdDataLoader>();
 
@@ -45,6 +49,7 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
+app.UseWebSockets();
 app.UseRouting();
 
 app.UseEndpoints(endpoints => 
